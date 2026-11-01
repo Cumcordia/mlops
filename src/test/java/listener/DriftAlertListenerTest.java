@@ -1,16 +1,16 @@
 package listener;
 
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import org.junit.jupiter.api.Test;
-
 import static mlops.event.EventType.ACCURACY_REPORTED;
 import static mlops.event.EventType.DRIFT_REPORTED;
+import static testsupport.TestEvents.metric;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import java.util.List;
+import testsupport.TestSubject;
+import org.junit.jupiter.api.Test;
+
 import mlops.listener.DriftAlert;
 import mlops.listener.DriftAlertListener;
-import static testsupport.TestEvents.metric;
-import testsupport.TestSubject;
 
 class DriftAlertListenerTest {
 

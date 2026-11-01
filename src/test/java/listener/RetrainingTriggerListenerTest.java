@@ -1,20 +1,20 @@
 package listener;
 
+import static mlops.event.EventType.ACCURACY_REPORTED;
+import static mlops.event.EventType.DRIFT_REPORTED;
+import static testsupport.TestEvents.metric;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-
-import static mlops.event.EventType.ACCURACY_REPORTED;
-import static mlops.event.EventType.DRIFT_REPORTED;
 import mlops.listener.RetrainRequest;
 import mlops.listener.RetrainRequest.Reason;
 import mlops.listener.RetrainingTriggerListener;
-import static testsupport.TestEvents.metric;
 import testsupport.TestSubject;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 class RetrainingTriggerListenerTest {
 

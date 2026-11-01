@@ -1,21 +1,23 @@
 package source;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import org.junit.jupiter.api.Test;
-
 import static mlops.event.EventType.ACCURACY_REPORTED;
 import static mlops.event.EventType.DRIFT_REPORTED;
 import static mlops.event.EventType.LATENCY_REPORTED;
-import mlops.event.MetricEvent;
-import mlops.source.DataDriftSource;
-import mlops.source.ModelMetricsSource;
 import static testsupport.TestEvents.CLOCK;
 import static testsupport.TestEvents.T0;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.junit.jupiter.api.Test;
+
+import mlops.event.MetricEvent;
+import mlops.source.DataDriftSource;
+
+import mlops.source.ModelMetricsSource;
 
 class SourcesTest {
 

@@ -1,11 +1,12 @@
 package event;
 
+import static testsupport.TestEvents.T0;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+
 import org.junit.jupiter.api.Test;
 
 import mlops.event.EventType;
 import mlops.event.MetricEvent;
-import static testsupport.TestEvents.T0;
 
 class MetricEventTest {
 

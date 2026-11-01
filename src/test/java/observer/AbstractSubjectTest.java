@@ -1,18 +1,17 @@
 package observer;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import org.junit.jupiter.api.Test;
-
 import static mlops.event.EventType.ACCURACY_REPORTED;
 import static mlops.event.EventType.DRIFT_REPORTED;
+import static testsupport.TestEvents.metric;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import java.util.ArrayList;
+import java.util.List;
 import mlops.event.MetricEvent;
 import mlops.observer.Observer;
-import static testsupport.TestEvents.metric;
 import testsupport.TestSubject;
+import org.junit.jupiter.api.Test;
 
 class AbstractSubjectTest {
 

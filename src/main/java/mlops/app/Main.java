@@ -19,7 +19,9 @@ public final class Main {
         int threads = args.length > 0 ? Integer.parseInt(args[0]) : DEFAULT_THREADS;
         int events = args.length > 1 ? Integer.parseInt(args[1]) : DEFAULT_EVENTS;
 
-        MonitoringSystem system = new MonitoringSystem(Clock.systemUTC(), MonitoringConfig.defaults());
+        Clock clock = Clock.systemUTC();
+        MonitoringSystem system = new MonitoringSystem(clock, MonitoringConfig.defaults(),
+                SamplePipeline.create(clock.instant()));
 
         try (ProducerPool pool = new ProducerPool(threads)) {
             pool.runAll(List.of(
@@ -33,6 +35,8 @@ public final class Main {
         System.out.println("drift alerts       : " + system.driftAlerts().alerts().size());
         System.out.println("retrain requests   : " + system.retrainRequests());
         System.out.println("unhealthy stages   : " + system.stageHealth().unhealthyStages());
+        system.planBoard().plans().forEach(plan -> System.out.printf("plan: stage=%s reason=%s cost=%.2f stale=%s%n",
+                plan.stageId(), plan.reason(), plan.stageCost(), plan.staleModels()));
     }
 
     private static void produceModelMetrics(ModelMetricsSource source, String modelId, String stageId, int events) {

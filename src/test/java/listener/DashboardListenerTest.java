@@ -1,15 +1,15 @@
 package listener;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-
 import static mlops.event.EventType.ACCURACY_REPORTED;
 import static mlops.event.EventType.LATENCY_REPORTED;
-import mlops.listener.DashboardListener;
 import static testsupport.TestEvents.metricAt;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import mlops.listener.DashboardListener;
 import testsupport.TestSubject;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 class DashboardListenerTest {
 

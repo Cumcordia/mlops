@@ -1,19 +1,18 @@
 package listener;
 
-import java.util.Set;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import org.junit.jupiter.api.Test;
-
 import static mlops.event.EventType.ACCURACY_REPORTED;
-import mlops.listener.StageAggregator;
-import mlops.listener.StageHealthListener;
 import static testsupport.TestEvents.CLOCK;
 import static testsupport.TestEvents.metric;
-import testsupport.TestSubject;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-/** Raw metrics -> StageAggregator (listener and subject) -> StageHealthListener. */
+import java.util.Set;
+import testsupport.TestSubject;
+import org.junit.jupiter.api.Test;
+
+import mlops.listener.StageAggregator;
+import mlops.listener.StageHealthListener;
+
 class StageHealthChainTest {
 
     @Test

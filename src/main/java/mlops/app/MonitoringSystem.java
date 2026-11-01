@@ -13,7 +13,10 @@ import mlops.listener.RetrainRequest;
 import mlops.listener.RetrainingTriggerListener;
 import mlops.listener.StageAggregator;
 import mlops.listener.StageHealthListener;
+import mlops.model.Pipeline;
 import mlops.observer.Subject;
+import mlops.planning.RetrainPlanBoard;
+import mlops.planning.RetrainPlanner;
 import mlops.source.DataDriftSource;
 import mlops.source.ModelMetricsSource;
 
@@ -27,14 +30,21 @@ public final class MonitoringSystem {
     private final MetricLogListener metricLog;
     private final StageAggregator stageAggregator;
     private final StageHealthListener stageHealth;
+    private final RetrainPlanner retrainPlanner;
+    private final RetrainPlanBoard planBoard;
     private final Queue<RetrainRequest> retrainRequests = new ConcurrentLinkedQueue<>();
 
-    public MonitoringSystem(Clock clock, MonitoringConfig config) {
+    public MonitoringSystem(Clock clock, MonitoringConfig config, Pipeline pipeline) {
         modelMetrics = new ModelMetricsSource(clock);
         dataDrift = new DataDriftSource(clock);
         driftAlerts = new DriftAlertListener(config.driftAlertThreshold());
-        retrainingTrigger = new RetrainingTriggerListener(
-                config.retrainMinAccuracy(), config.retrainMaxDrift(), retrainRequests::add);
+        retrainPlanner = new RetrainPlanner(pipeline, clock, config.costRates(), config.modelMaxAge());
+        planBoard = new RetrainPlanBoard();
+        retrainingTrigger = new RetrainingTriggerListener(config.retrainMinAccuracy(), config.retrainMaxDrift(),
+                request -> {
+                    retrainRequests.add(request);
+                    retrainPlanner.plan(request);
+                });
         dashboard = new DashboardListener();
         metricLog = new MetricLogListener();
         stageAggregator = new StageAggregator(clock);
@@ -48,6 +58,7 @@ public final class MonitoringSystem {
             stageAggregator.attachTo(source);
         }
         stageHealth.attachTo(stageAggregator);
+        planBoard.attachTo(retrainPlanner);
     }
 
     public ModelMetricsSource modelMetrics() {
@@ -80,6 +91,14 @@ public final class MonitoringSystem {
 
     public StageHealthListener stageHealth() {
         return stageHealth;
+    }
+
+    public RetrainPlanner retrainPlanner() {
+        return retrainPlanner;
+    }
+
+    public RetrainPlanBoard planBoard() {
+        return planBoard;
     }
 
     public List<RetrainRequest> retrainRequests() {

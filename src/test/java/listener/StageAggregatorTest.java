@@ -1,22 +1,21 @@
 package listener;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-
 import static mlops.event.EventType.ACCURACY_REPORTED;
 import static mlops.event.EventType.DRIFT_REPORTED;
 import static mlops.event.EventType.LATENCY_REPORTED;
 import static mlops.event.EventType.STAGE_SUMMARY;
-import mlops.event.StageSummaryEvent;
-import mlops.listener.StageAggregator;
 import static testsupport.TestEvents.CLOCK;
 import static testsupport.TestEvents.metric;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.util.ArrayList;
+import java.util.List;
+import mlops.event.StageSummaryEvent;
+import mlops.listener.StageAggregator;
 import testsupport.TestSubject;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 class StageAggregatorTest {
 

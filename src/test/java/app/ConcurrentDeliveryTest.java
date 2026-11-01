@@ -1,4 +1,10 @@
-package testapp;
+package app;
+
+import static mlops.event.EventType.ACCURACY_REPORTED;
+import static mlops.event.EventType.STAGE_SUMMARY;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.time.Clock;
 import java.util.List;
@@ -9,21 +15,16 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.IntStream;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import org.junit.jupiter.api.Test;
-
 import mlops.app.MonitoringConfig;
 import mlops.app.MonitoringSystem;
 import mlops.app.ProducerPool;
-import static mlops.event.EventType.ACCURACY_REPORTED;
-import static mlops.event.EventType.STAGE_SUMMARY;
 import mlops.event.MetricEvent;
 import mlops.event.StageSummaryEvent;
 import mlops.listener.RetrainRequest;
 import mlops.observer.Observer;
 import mlops.source.ModelMetricsSource;
+import testsupport.TestPipelines;
+import org.junit.jupiter.api.Test;
 
 class ConcurrentDeliveryTest {
 
@@ -43,7 +44,8 @@ class ConcurrentDeliveryTest {
 
     @Test
     void fourProducersDeliverEveryEventToEveryListenerExactlyOnce() throws InterruptedException {
-        MonitoringSystem system = new MonitoringSystem(Clock.systemUTC(), MonitoringConfig.defaults());
+        MonitoringSystem system = new MonitoringSystem(Clock.systemUTC(), MonitoringConfig.defaults(),
+                TestPipelines.singleStage("shared-stage"));
         List<StageSummaryEvent> summaries = new CopyOnWriteArrayList<>();
         system.stageAggregator().subscribe(STAGE_SUMMARY, summaries::add);
 
@@ -61,7 +63,8 @@ class ConcurrentDeliveryTest {
 
     @Test
     void contendedStageGetsExactlyOneRetrainRequest() throws InterruptedException {
-        MonitoringSystem system = new MonitoringSystem(Clock.systemUTC(), MonitoringConfig.defaults());
+        MonitoringSystem system = new MonitoringSystem(Clock.systemUTC(), MonitoringConfig.defaults(),
+                TestPipelines.singleStage("shared-stage"));
 
         try (ProducerPool pool = new ProducerPool(PRODUCERS)) {
             pool.runAll(producers(system.modelMetrics(), 0.10));
@@ -71,6 +74,7 @@ class ConcurrentDeliveryTest {
         assertEquals(1, requests.size());
         assertEquals("shared-stage", requests.get(0).stageId());
         assertEquals(TOTAL, system.metricLog().size());
+        assertEquals(1, system.planBoard().plans().size());
     }
 
     @Test

@@ -3,7 +3,6 @@ package testsupport;
 import java.time.Clock;
 import java.time.Instant;
 import java.time.ZoneOffset;
-
 import mlops.event.EventType;
 import mlops.event.MetricEvent;
 

@@ -7,7 +7,8 @@ public enum EventType {
     ACCURACY_REPORTED(true),
     LATENCY_REPORTED(true),
     DRIFT_REPORTED(true),
-    STAGE_SUMMARY(false);
+    STAGE_SUMMARY(false),
+    RETRAIN_PLANNED(false);
 
     private final boolean metric;
 
